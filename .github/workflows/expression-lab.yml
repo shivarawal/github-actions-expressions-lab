@@ -1,25 +1,26 @@
-name: Expression Lab
+name: Job Dependency Lab
 
-on: 
+on:
   workflow_dispatch:
 
-env:
-  APP_NAME: expression-lab
-  APP_ENV: dev
-
 jobs:
-  expression-test:
-     runs-on: ubuntu-latest
 
-     steps:
-       - uses: actions/checkout@v4
-       - name: Expression vs shell test
-         run: | 
-           echo "Expression style: ${{ env.APP_NAME }}"
-           echo "shell style: $APP_NAME"
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build step
+        run: echo "Building application..."
 
-       - name: context test 
-         run: |
-           echo "Actor: ${{ github.actor }}"
-           echo "Branch: ${{ github.ref_name }}"
-  
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test step
+        run: echo "Running tests..."
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy step
+        run: echo "Deploying application..."
